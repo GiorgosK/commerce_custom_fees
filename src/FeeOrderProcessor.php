@@ -17,7 +17,7 @@ class FeeOrderProcessor implements OrderProcessorInterface {
    */
   public function process(OrderInterface $order) {
     $payment = $order->get('payment_gateway')->first()->entity;
-    if ($payment->id() == 'cod') {
+    if ($payment && $payment->id() == 'cod') {
       $fee = 1.8;
       $order->addAdjustment(new Adjustment([
         'type' => 'fee',
