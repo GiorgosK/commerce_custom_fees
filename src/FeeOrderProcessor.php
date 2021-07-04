@@ -16,12 +16,12 @@ class FeeOrderProcessor implements OrderProcessorInterface {
    * {@inheritdoc}
    */
   public function process(OrderInterface $order) {
-    $payment = $order->get('payment_gateway')->first()->entity;
-    if ($payment && $payment->id() == 'cod') {
+    $payment = $order->get('payment_gateway');
+    if ($payment && isset($payment->first()->entity) && $payment->first()->entity->id() == 'cod') {
       $fee = 1.8;
       $order->addAdjustment(new Adjustment([
         'type' => 'fee',
-        'label' => $payment->label(),
+        'label' => $payment->first()->entity->label(),
         'amount' => new Price($fee, 'EUR')
       ]));  
     } 
